@@ -7,9 +7,9 @@ services:
     container_name: hr-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: hr_management
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Reem1994$
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -26,17 +26,17 @@ services:
     container_name: hr-app
     restart: unless-stopped
     environment:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://postgres:Reem1994$@postgres:5432/hr_management?schema=public
-      JWT_SECRET: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MzU0MTA5OCwiZXhwIjoxNzYzNTQ0Njk4fQ._-V0hUKoz-4noPRIqNSjUy3cKqMkz-Lgms1SE1hDdY4
-      JWT_EXPIRES_IN: "7d"
-      PORT: 3000
+      NODE_ENV: ${NODE_ENV}
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      PORT: ${PORT}
       # Email configuration
-      SMTP_HOST: smtp.gmail.com
-      SMTP_PORT: 587
-      SMTP_USER: reemhasan088@gmail.com
-      SMTP_PASS: sisw pphu qhwo kabq
-      SMTP_FROM: HR
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_FROM: ${SMTP_FROM}
     ports:
       - "3000:3000"
     depends_on:
@@ -58,8 +58,8 @@ services:
     container_name: hr-pgadmin
     restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@hrmanagement.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5050:80"
     depends_on:
