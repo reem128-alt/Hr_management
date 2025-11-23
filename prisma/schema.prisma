@@ -1,0 +1,159 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password      String
+  profileImage  String?  // URL to the profile image
+  role          Role     @default(EMPLOYEE)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  employee      Employee? // optional relation
+}
+
+model Employee {
+  id                          String     @id @default(cuid())
+  employeeNumber              String?    @unique
+  firstName                   String
+  lastName                    String
+  email                       String     @unique
+  phoneNumber                 String?
+  hireDate                    DateTime?
+  department                  Department? @relation(fields: [departmentId], references: [id])
+  departmentId                String?
+  position                    Position?   @relation(fields: [positionId], references: [id])
+  positionId                  String?
+  rate                        Float?      // salary base or rate
+  isActive                    Boolean     @default(true)
+  createdAt                   DateTime    @default(now())
+  updatedAt                   DateTime    @updatedAt
+  user                        User?       @relation(fields: [userId], references: [id])
+  userId                      String?     @unique
+  attendances                 Attendance[]
+  leaves                      Leave[]
+  payrolls                    Payroll[]
+  files                       File[]
+}
+
+model Department {
+  id        String     @id @default(cuid())
+  name      String
+  code      String?    @unique
+  employees Employee[]
+}
+
+model Position {
+  id        String    @id @default(cuid())
+  title     String
+  level     String?
+  employees Employee[]
+}
+
+model Attendance {
+  id         String   @id @default(cuid())
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId String
+  date       DateTime
+  checkIn    DateTime?
+  checkOut   DateTime?
+  hours      Float?   // calculated hours
+  note       String?
+  createdAt  DateTime @default(now())
+}
+
+model Leave {
+  id           String   @id @default(cuid())
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  employeeId   String
+  type         LeaveType
+  startDate    DateTime
+  endDate      DateTime
+  days         Int
+  reason       String?
+  status       LeaveStatus @default(PENDING)
+  approverId   String?    // optional user id of approver
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Payroll {
+  id          String        @id @default(cuid())
+  employee    Employee      @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  periodStart DateTime
+  periodEnd   DateTime
+  grossSalary Float
+  netSalary   Float
+  createdAt   DateTime      @default(now())
+  items       PayrollItem[]
+}
+
+model PayrollItem {
+  id         String  @id @default(cuid())
+  payroll    Payroll @relation(fields: [payrollId], references: [id])
+  payrollId  String
+  label      String
+  amount     Float
+  type       ItemType
+}
+
+model File {
+  id         String   @id @default(cuid())
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId String
+  filename   String
+  url        String
+  mimeType   String
+  createdAt  DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  HR
+  MANAGER
+  EMPLOYEE
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+  UNPAID
+  EMERGENCY
+}
+
+enum ItemType {
+  ALLOWANCE
+  DEDUCTION
+  OVERTIME
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  type      OtpType
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+enum OtpType {
+  LOGIN
+  REGISTER
+}
+

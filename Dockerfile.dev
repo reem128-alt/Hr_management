@@ -1,0 +1,23 @@
+# Development Dockerfile
+FROM node:18-slim
+
+WORKDIR /app
+
+# Install OpenSSL for Prisma
+RUN apt-get update -y && apt-get install -y openssl
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Expose ports
+EXPOSE 3000 9229
+
+# Start development server
+CMD ["npm", "run", "start:dev"]
