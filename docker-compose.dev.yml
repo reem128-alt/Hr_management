@@ -29,7 +29,7 @@ services:
       DATABASE_URL: postgresql://postgres:Reem1994$@postgres:5432/hr_management?schema=public
       JWT_SECRET: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MzU0MTA5OCwiZXhwIjoxNzYzNTQ0Njk4fQ._-V0hUKoz-4noPRIqNSjUy3cKqMkz-Lgms1SE1hDdY4
       JWT_EXPIRES_IN: "7d"
-      PORT: 3000
+      PORT: 4000
       # Email configuration
       SMTP_HOST: smtp.gmail.com
       SMTP_PORT: 587

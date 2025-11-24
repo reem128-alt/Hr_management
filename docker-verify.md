@@ -1,5 +1,5 @@
 # Docker Container Verification Guide
-
+docker-compose up -d
 ## 1. Check Container Status
 
 ```bash
