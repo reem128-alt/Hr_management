@@ -12,12 +12,14 @@ import { PayrollModule } from "./payroll/payroll.module";
 import { NotificationModule } from "./notification/notification.module";
 import { UserModule } from "./user/user.module";
 import { UploadModule } from "./upload/upload.module";
+import { LoggerModule } from "./logger/logger.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    LoggerModule,
     PrismaModule,
     CommonModule,
     AuthModule,
